@@ -9,9 +9,12 @@ import java.net.Socket;
 
 public class Protocol {
 
-	public Protocol() {
+	public Protocol(String username) throws IOException {
 		Socket socket = new Socket();
 		String address = "ec2-52-41-213-54.us-west-2.compute.amazonaws.com";
+		BufferedReader input;
+		PrintWriter output;
+		
 		int port = 8989;
 		try {
 			socket.connect(new InetSocketAddress(address, port),3000);
@@ -20,17 +23,17 @@ public class Protocol {
 			System.err.println("Socket Connection Failed");
 		}
 		
-		try {
-			BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			PrintWriter output = new PrintWriter(socket.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	
+		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		output = new PrintWriter(socket.getOutputStream());
+	
 		
 		System.out.println("connected");
+		output.println();
+		
 	}
-	public static void main(String[] args) {
-		Protocol p = new Protocol();
+	public static void main(String[] args) throws IOException {
+		Protocol p = new Protocol("Ethan");
 		
 	}
 
