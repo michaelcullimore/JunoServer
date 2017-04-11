@@ -2,13 +2,37 @@ package junoServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+
 import org.json.JSONObject;
 
 public class Protocol {
 
-	public Protocol() {
-		// TODO Auto-generated constructor stub
+	public Protocol(String username) throws IOException {
+		Socket socket = new Socket();
+		String address = "ec2-52-41-213-54.us-west-2.compute.amazonaws.com";
+		BufferedReader input;
+		PrintWriter output;
+
+		int port = 8989;
+		try {
+			socket.connect(new InetSocketAddress(address, port), 3000);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Socket Connection Failed");
+		}
+
+		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		output = new PrintWriter(socket.getOutputStream());
+
+		System.out.println("connected");
+		output.println("{\"type\":\"login\",\"message\":{\"username\":\"ethan\"}}");
+		output.flush();
+		System.out.println(input.readLine());
+
 	}
 
 	private class Reader implements Runnable {
@@ -16,7 +40,7 @@ public class Protocol {
 		private BufferedReader input;
 		boolean running;
 
-		private Reader(Socket s, BufferedReader in){
+		private Reader(Socket s, BufferedReader in) {
 			socket = s;
 			input = in;
 			running = true;
@@ -27,19 +51,23 @@ public class Protocol {
 			String reply;
 			JSONObject message;
 			try {
-				while(running){
+				while (running) {
 					message = new JSONObject(input.readLine());
-					if (message.getString("type").equals("acknowledge")){
+					if (message.getString("type").equals("acknowledge")) {
 						System.out.println("ack recv'd");
-					}
-					else{
+					} else {
 						System.out.println("deny recv'd");
 						running = false;
 					}
 				}
-			}catch(IOException e){
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
+
+	public static void main(String[] args) throws IOException {
+		Protocol protocol = new Protocol("Ethan");
+	}
+
 }
