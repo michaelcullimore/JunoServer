@@ -26,10 +26,11 @@ public class Protocol {
 	
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new PrintWriter(socket.getOutputStream());
-	
+		
 		
 		System.out.println("connected");
-		output.println();
+		output.println("{\"type\":\"login\",\"message\":{\"username\":\"ethan\"}}");
+		System.out.println(input.readLine());
 		
 	}
 	public static void main(String[] args) throws IOException {
