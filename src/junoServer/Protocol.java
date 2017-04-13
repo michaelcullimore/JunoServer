@@ -12,6 +12,7 @@ import org.json.JSONObject;
 public class Protocol {
 	private Receivable client;
 	private PrintWriter output;
+
 	public Protocol(String username, Receivable client) throws IOException {
 		this.client = client;
 		Socket socket = new Socket();
@@ -25,23 +26,22 @@ public class Protocol {
 			e.printStackTrace();
 			System.err.println("Socket Connection Failed");
 		}
-		
+
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new PrintWriter(socket.getOutputStream());
-		
-		
-		
+
 		System.out.println("connected");
-		output.println("{\"type\":\"login\",\"message\":{\"username\":\"ethan\"}}");
+		output.println("{\"type\":\"login\",\"message\":{\"username\":\"" + username + "\"}}");
 		output.flush();
 		System.out.println(input.readLine());
 
 	}
-	
+
 	private void sendMessage(JSONObject message) {
 		output.println(message);
-		output.flush();	
+		output.flush();
 	}
+
 	private class Reader implements Runnable {
 		private Socket socket;
 		private BufferedReader input;
@@ -76,7 +76,7 @@ public class Protocol {
 	}
 
 	public static void main(String[] args) throws IOException {
-//		Protocol protocol = new Protocol("Ethan", ));
+		// Protocol protocol = new Protocol("Ethan", ));
 	}
 
 }
