@@ -34,7 +34,7 @@ public class Protocol {
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new PrintWriter(socket.getOutputStream());
 		login();
-		
+		new Thread(new Reader(socket, input, client)).start();
 
 	}
 	private void login() {
@@ -49,6 +49,7 @@ public class Protocol {
 				if (message.getString("type").equals("acknowledge")) {
 					ack = true;
 					System.out.println("connected");
+					
 				} else {
 					client.giveMessage(message);
 				}
