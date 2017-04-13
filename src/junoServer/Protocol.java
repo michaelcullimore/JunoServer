@@ -10,13 +10,13 @@ import java.net.Socket;
 import org.json.JSONObject;
 
 public class Protocol {
-	Receivable client;
+	private Receivable client;
+	private PrintWriter output;
 	public Protocol(String username, Receivable client) throws IOException {
 		this.client = client;
 		Socket socket = new Socket();
 		String address = "ec2-52-41-213-54.us-west-2.compute.amazonaws.com";
 		BufferedReader input;
-		PrintWriter output;
 
 		int port = 8989;
 		try {
@@ -25,17 +25,23 @@ public class Protocol {
 			e.printStackTrace();
 			System.err.println("Socket Connection Failed");
 		}
-
+		
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		output = new PrintWriter(socket.getOutputStream());
-
+		
+		
+		
 		System.out.println("connected");
 		output.println("{\"type\":\"login\",\"message\":{\"username\":\"ethan\"}}");
 		output.flush();
 		System.out.println(input.readLine());
 
 	}
-
+	
+	private void sendMessage(JSONObject message) {
+		output.println(message);
+		output.flush();	
+	}
 	private class Reader implements Runnable {
 		private Socket socket;
 		private BufferedReader input;
