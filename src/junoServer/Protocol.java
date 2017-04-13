@@ -10,8 +10,9 @@ import java.net.Socket;
 import org.json.JSONObject;
 
 public class Protocol {
-
-	public Protocol(String username) throws IOException {
+	Receivable client;
+	public Protocol(String username, Receivable client) throws IOException {
+		this.client = client;
 		Socket socket = new Socket();
 		String address = "ec2-52-41-213-54.us-west-2.compute.amazonaws.com";
 		BufferedReader input;
@@ -69,7 +70,7 @@ public class Protocol {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Protocol protocol = new Protocol("Ethan");
+//		Protocol protocol = new Protocol("Ethan", ));
 	}
 
 }
