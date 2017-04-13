@@ -49,6 +49,7 @@ public class Protocol {
 				if (message.getString("type").equals("acknowledge")) {
 					ack = true;
 					System.out.println("connected");
+					client.setUsername(username);
 					
 				} else {
 					client.giveMessage(message);
