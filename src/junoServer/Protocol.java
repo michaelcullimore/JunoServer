@@ -38,12 +38,14 @@ public class Protocol {
 	private class Reader implements Runnable {
 		private Socket socket;
 		private BufferedReader input;
+		private Receivable client;
 		boolean running;
 
-		private Reader(Socket s, BufferedReader in) {
+		private Reader(Socket s, BufferedReader in, Receivable cli) {
 			socket = s;
 			input = in;
 			running = true;
+			client = cli;
 		}
 
 		@Override
@@ -54,7 +56,7 @@ public class Protocol {
 				while (running) {
 					message = new JSONObject(input.readLine());
 					if (message.getString("type").equals("acknowledge")) {
-						System.out.println("ack recv'd");
+						client.giveMessage(message);
 					} else {
 						System.out.println("deny recv'd");
 						running = false;
