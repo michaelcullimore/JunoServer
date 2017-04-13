@@ -56,11 +56,10 @@ public class Protocol {
 			try {
 				while (running) {
 					message = new JSONObject(input.readLine());
-					if (message.getString("type").equals("acknowledge")) {
-						client.giveMessage(message);
-					} else {
-						System.out.println("deny recv'd");
+					if (message.getString("type").equals("deny")) {
 						running = false;
+					} else {
+						client.giveMessage(message);
 					}
 				}
 			} catch (IOException e) {
